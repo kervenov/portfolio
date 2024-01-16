@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "kakamyrat",
+    "password": "admin",
+    "database": "portfolio_db",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
