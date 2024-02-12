@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/entities/user.entity';
-import * as uniqid from 'uniqid';
+import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from 'src/user/dto/login-user.dto';
 import { Roles } from 'src/user/enums/roles.enum';
@@ -21,13 +21,13 @@ export class AuthService {
       );
       return { access_token: newToken };
     } catch (error) {
-      console.error('Refresh token verification failed:', error.message);
-      throw new Error('Refresh token verification failed');
+      console.log('Error occured: ', error)
+      throw new HttpException('Given token is not valid or expired!', HttpStatus.NOT_ACCEPTABLE)
     }
   }
   async create(createUserDto: CreateUserDto) {
     const newUser = await this.userRepository.create({
-      uuid: await uniqid(`${Roles.user}-`),
+      uuid: uuidv4(),
       username: createUserDto.username,
       role: Roles.user,
       password: await bcrypt.hash(createUserDto.password, 10),
@@ -53,14 +53,15 @@ export class AuthService {
     if (!user) {
       throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
     }
-    if (await bcrypt.compare(user.password, password)) {
-      const accessToken = this.generateToken(user, '20m');
-      const refreshToken = this.generateToken(user, '7d');
-      return {
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      };
-    } else {
+    console.log(user);
+    if (await bcrypt.compare(password, user.password)) {
+      const accessToken = await this.generateToken(user, '30m');
+      const refreshToken = await this.generateToken(user, '7d');
+      return { 
+    access_token: accessToken, 
+    refresh_token: refreshToken }
+    } 
+    else {
       throw new HttpException(
         'Wrong password or username!',
         HttpStatus.BAD_REQUEST,

@@ -14,7 +14,7 @@ export class CreatePosterDto {
   })
   location: PosterLocation;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number})
   price: number;
 
   @ApiProperty({

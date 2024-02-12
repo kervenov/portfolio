@@ -10,7 +10,7 @@ export const databaseProviders = [
         dialect: 'postgres',
         host: 'localhost',
         port: 5432,
-        username: 'kakamyrat',
+        username: 'postgres',
         password: 'admin',
         database: 'portfolio_db',
         logging: false,

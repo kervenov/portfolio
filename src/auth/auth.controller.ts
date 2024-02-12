@@ -13,14 +13,15 @@ export class AuthController {
   create(@Body() createAuthDto: CreateUserDto) {
     return this.authService.create(createAuthDto);
   }
-  @Post('/:refresh')
-  @Version('1')
-  refresh(@Param('refresh') refreshToken: string) {
-    return this.authService.verifyRefreshToken(refreshToken);
-  }
   @Post('login')
   @Version('1')
   login(@Body() body: LoginUserDto) {
     return this.authService.login(body);
+  }
+  @Post('/:refresh')
+  @Version('1')
+  refresh(@Param('refresh') refreshToken: string) {
+    console.log(refreshToken)
+    return this.authService.verifyRefreshToken(refreshToken);
   }
 }

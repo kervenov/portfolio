@@ -5,7 +5,7 @@ export const multerOptions = {
     destination: 'public',
     filename: async (req, file, cb) => {
       try {
-        cb(null, uniqid('image-'));
+        cb(null, uniqid('file-'));
       } catch (err) {
         console.log(err);
       }

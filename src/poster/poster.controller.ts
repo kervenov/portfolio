@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -38,7 +39,7 @@ export class PosterController {
 
   @Get('get-all-comments/:postId')
   @Version('1')
-  getAllComments(@Param('postId') postId: string) {
+  getAllComments(@Param('postId', new ParseUUIDPipe()) postId: string) {
     return this.posterService.getAllComments(postId);
   }
   @UseGuards(AuthGuard)
@@ -48,6 +49,7 @@ export class PosterController {
     return this.posterService.addComment(body, request);
   }
   @UseGuards(AuthGuard)
+  
   @Delete('delete-all')
   @Version('1')
   deleteAll(@Req() req: Request) {
@@ -56,7 +58,7 @@ export class PosterController {
   @UseGuards(AuthGuard)
   @Delete('delete-one/:id')
   @Version('1')
-  deleteOne(@Param('id') id: string, @Req() req: Request) {
+  deleteOne(@Param('id', new ParseUUIDPipe()) id: string, @Req() req: Request) {
     return this.posterService.deleteOne(id, req);
   }
 
@@ -65,7 +67,7 @@ export class PosterController {
   @Version('1')
   modifyPoster(
     @Query() body: UpdatePosterDto,
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe()) id: string,
     @Req() req: Request,
   ) {
     return this.posterService.modifyPoster(body, id, req);

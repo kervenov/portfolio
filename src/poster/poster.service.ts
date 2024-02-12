@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreatePosterDto } from './dto/create-poster.dto';
 import { AddPoster } from './entities/add-poster.entity';
-import * as uniqid from 'uniqid';
+import { v4 as uuidv4 } from 'uuid';
 import { UpdatePosterDto } from 'src/dto/update-poster-dto';
 import { User } from 'src/user/entities/user.entity';
 import { Comment } from './entities/comment.entity';
@@ -25,7 +25,7 @@ export class PosterService {
   }
   async create(body: CreatePosterDto, req) {
     const newPoster = await this.posterRepository.create({
-      postId: uniqid('post-'),
+      postId: uuidv4(),
       postName: body.postName,
       location: body.location,
       price: body.price,
@@ -45,7 +45,7 @@ export class PosterService {
       where: { uuid: req['id'] },
     });
     const newComment = await this.commentRepository.create({
-      commentId: uniqid('comment-'),
+      commentId: uuidv4(),
       commentator: commentator.username,
       comment: body.comment,
       postId: targetPost.postId,

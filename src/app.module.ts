@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { PosterModule } from './poster/poster.module';
 import { DatabaseModule } from './database/database.module';
 import { databaseProviders } from './database/database.provider';
-import { AdminModule } from './admin/admin.module';
 import { posterProviders } from './poster/poster.providers';
 import { UserModule } from './user/user.module';
 import { userProviders } from './user/user.provider';
@@ -13,10 +12,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { commentProviders } from './poster/comment.provider';
 import { MulterModule } from '@nestjs/platform-express';
 import { AuthService } from './auth/auth.service';
-import { CommandModule } from 'nestjs-command';
 @Module({
   imports: [
-    CommandModule,
     MulterModule.registerAsync({
       useFactory: () => ({
         dest: './public',
@@ -28,7 +25,6 @@ import { CommandModule } from 'nestjs-command';
     }),
     PosterModule,
     DatabaseModule,
-    AdminModule,
     UserModule,
     AuthModule,
   ],

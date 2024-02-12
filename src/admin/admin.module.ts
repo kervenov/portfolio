@@ -6,9 +6,16 @@ import { posterProviders } from 'src/poster/poster.providers';
 import { DatabaseModule } from 'src/database/database.module';
 import { userProviders } from 'src/user/user.provider';
 import { AuthService } from 'src/auth/auth.service';
+import { JwtModule } from '@nestjs/jwt';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule,  
+    JwtModule.register({
+    global: true,
+    secret: 'rootadmin',
+  }),
+],
   controllers: [AdminController],
   providers: [
     AuthService,
