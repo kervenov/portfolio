@@ -72,4 +72,11 @@ export class PosterController {
   ) {
     return this.posterService.modifyPoster(body, id, req);
   }
+  @UseGuards(AuthGuard)
+  @Get('view-poster/:uuid')
+  @Version('1')
+  viewPosteer(@Param('uuid', new ParseUUIDPipe()) id: string){
+    return this.posterService.viewPoster(id);
+  }
+
 }

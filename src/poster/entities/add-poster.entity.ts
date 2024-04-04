@@ -32,6 +32,9 @@ export class AddPoster extends Model {
   @Column({})
   description: string;
 
+  @Column({})
+  viewed: number;
+
   @ForeignKey(() => User)
   @Column
   belongsTo: string;

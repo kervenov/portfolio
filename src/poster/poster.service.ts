@@ -33,6 +33,7 @@ export class PosterService {
       mobile: body.mobile,
       comments: {},
       description: body.description,
+      viewed: 0,
       belongsTo: req['id'],
     });
     return newPoster;
@@ -79,5 +80,11 @@ export class PosterService {
       where: { belongsTo: req['id'] },
     });
     return allPosters;
+  }
+  async viewPoster(id: string){
+    const poster = await this.posterRepository.findOne({ where: { postId:id }});
+    poster.viewed += 1;
+    poster.save();
+    return poster;
   }
 }

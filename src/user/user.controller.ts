@@ -17,8 +17,6 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { UploadFileDto } from './dto/upload-file.dto';
 import * as multer from 'multer';
-import { multerOptions } from 'src/multer.config';
-import { diskStorage } from 'multer';
 @ApiSecurity('token')
 @ApiTags('User')
 @Controller('user')
@@ -31,7 +29,7 @@ export class UserController {
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Upload an image',
-    type: UploadFileDto, // Use the DTO instead of inline schema
+    type: UploadFileDto, 
   })
   @UseInterceptors(
     FileInterceptor('file', { storage: multer.memoryStorage() }),
@@ -48,28 +46,4 @@ export class UserController {
     return this.userService.setProfileImage(file, req);
   }
 
-  @UseGuards(AuthGuard)
-  @Post('upload-video')
-  @Version('1')
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    description: 'Upload a video',
-    type: UploadFileDto, // Use the DTO instead of inline schema
-  })
-  @UseInterceptors(
-    FileInterceptor('file', multer.memoryStorage()),
-  )
-  async ploadVideo(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new FileTypeValidator({ fileType: 'video' }),
-          new MaxFileSizeValidator({ maxSize: 20000000 })],
-      }),
-    )
-    file: any,
-    @Req() req: Request,
-  ) {
-    return this.userService.uploadVideo(file, req);
-  }
 }
