@@ -6,6 +6,9 @@ import { UpdatePosterDto } from 'src/dto/update-poster-dto';
 import { User } from 'src/user/entities/user.entity';
 import { Comment } from './entities/comment.entity';
 import { AddCommentDto } from './dto/add-comment.dto';
+import { GetAllFilterDto } from 'src/dto/get-all-filter-dto';
+import { Request } from 'express';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class PosterService {
@@ -75,9 +78,34 @@ export class PosterService {
     await this.posterRepository.destroy({ where: { belongsTo: req['id'] } });
     return { message: 'Deleted succesfully.' };
   }
-  async getAll(req) {
+  async getAll(query: GetAllFilterDto, req: Request) {
+    let options: any = {};
+    const { limit, offset, location, category, minPrice, maxPrice, keyword, } = query;
+     const locations = Array.isArray(location) ? location : [location];
+    const categories = Array.isArray(category) ? category : [category];
+    options = { ...options, belongsTo: req['id'] };
+    if (category && category.length > 0) {
+      options = { ...options, category: { [Op.in]: categories } };
+    }
+    if (location && location.length > 0) {
+      options = { ...options, location: { [Op.in]: locations } };
+    }
+    if (minPrice || maxPrice) {
+      options = { ...options, price: { [Op.between]: [minPrice || 0, maxPrice || Number.MAX_VALUE] } };
+    }
+    if (keyword) {
+      options = {
+        ...options,
+      [Op.or]: {
+          postName: { [Op.iLike]: `%${keyword}%` },
+          description: { [Op.iLike]: `%${keyword}%` },
+          category: { [Op.iLike]: `%${keyword}%` },
+        },}
+    }
     const allPosters = await this.posterRepository.findAll({
-      where: { belongsTo: req['id'] },
+      limit: limit,
+      offset: offset,
+      where: options,
     });
     return allPosters;
   }

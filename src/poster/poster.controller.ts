@@ -20,6 +20,7 @@ import { UpdatePosterDto } from 'src/dto/update-poster-dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { AddCommentDto } from './dto/add-comment.dto';
+import { GetAllFilterDto } from 'src/dto/get-all-filter-dto';
 @ApiSecurity('token')
 @ApiTags('Posters & Only for users')
 @Controller()
@@ -34,8 +35,8 @@ export class PosterController {
   @UseGuards(AuthGuard)
   @Get('get-all')
   @Version('1')
-  getAll(@Req() request: Request) {
-    return this.posterService.getAll(request);
+  getAll(@Query() query: GetAllFilterDto, @Req() request: Request) {
+    return this.posterService.getAll(query, request);
   }
 
   @Get('get-all-comments/:postId')
