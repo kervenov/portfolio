@@ -2,23 +2,41 @@ import { ApiProperty } from '@nestjs/swagger';
 import { PosterCategory } from 'src/poster/enums/poster-category';
 import { PosterLocation } from 'src/poster/enums/poster-location';
 
-export class GetByFilterDto {
+export class GetAllFilterDto {
+  @ApiProperty({
+    default: 10,
+    required: false,
+    type: Number,
+  })
+  limit: number;
+
+  @ApiProperty({
+    default: 0,
+    required: false,
+    type: Number,
+  })
+  offset: number;
+
   @ApiProperty({
     required: false,
     name: 'location',
-    type: String,
-    enum: PosterLocation,
+    type: Array,
   })
-  location: PosterLocation;
+  location: string[];
 
   @ApiProperty({
     required: false,
     name: 'category',
-    type: String,
-    enum: PosterCategory,
+    type: Array,
   })
-  category: PosterCategory;
+  category: string[];
 
+  @ApiProperty({
+    required: false,
+    name: 'keyword',
+  })
+  keyword: string;
+  
   @ApiProperty({ required: false })
   minPrice: number;
 

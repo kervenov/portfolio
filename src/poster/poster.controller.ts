@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Body,
   Controller,
@@ -27,7 +28,7 @@ export class PosterController {
   @UseGuards(AuthGuard)
   @Post('create-poster')
   @Version('1')
-  create(@Query() body: CreatePosterDto, @Req() request: Request) {
+  create(@Body() body: CreatePosterDto, @Req() request: Request) {
     return this.posterService.create(body, request);
   }
   @UseGuards(AuthGuard)
@@ -49,7 +50,6 @@ export class PosterController {
     return this.posterService.addComment(body, request);
   }
   @UseGuards(AuthGuard)
-  
   @Delete('delete-all')
   @Version('1')
   deleteAll(@Req() req: Request) {
@@ -75,8 +75,7 @@ export class PosterController {
   @UseGuards(AuthGuard)
   @Get('view-poster/:uuid')
   @Version('1')
-  viewPosteer(@Param('uuid', new ParseUUIDPipe()) id: string){
+  viewPosteer(@Param('uuid', new ParseUUIDPipe()) id: string) {
     return this.posterService.viewPoster(id);
   }
-
 }

@@ -6,24 +6,14 @@ export class CreatePosterDto {
   @ApiProperty()
   postName: string;
 
-  @ApiProperty({
-    name: 'location',
-    type: String,
-    enum: PosterLocation,
-    description: 'The location of the poster',
-  })
-  location: PosterLocation;
+  @ApiProperty()
+  location: string;
 
-  @ApiProperty({ type: Number})
+  @ApiProperty()
   price: number;
 
-  @ApiProperty({
-    name: 'category',
-    type: String,
-    enum: PosterCategory,
-    description: 'The category of the poster',
-  })
-  category: PosterCategory;
+  @ApiProperty()
+  category: string;
 
   @ApiProperty()
   mobile: string;

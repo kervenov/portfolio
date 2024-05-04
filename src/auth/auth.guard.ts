@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   CanActivate,
   ExecutionContext,
@@ -17,7 +18,10 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      throw new HttpException('Invalid or expired token!', HttpStatus.NOT_ACCEPTABLE);
+      throw new HttpException(
+        'Invalid or expired token!',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
     }
     try {
       const payload = await this.jwtService.verifyAsync(token);
