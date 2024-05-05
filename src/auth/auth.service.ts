@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, NotAcceptableException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/entities/user.entity';
@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from 'src/user/dto/login-user.dto';
 import { Roles } from 'src/user/enums/roles.enum';
+import { ExpiredTokenException, NotFoundException, UnauthorizedException } from 'src/filters/custom-exceptions';
 @Injectable()
 export class AuthService {
   constructor(
@@ -22,7 +23,7 @@ export class AuthService {
       return { access_token: newToken };
     } catch (error) {
       console.log('Error occured: ', error)
-      throw new HttpException('Given token is not valid or expired!', HttpStatus.NOT_ACCEPTABLE)
+      throw new ExpiredTokenException();
     }
   }
   async create(createUserDto: CreateUserDto) {
@@ -42,16 +43,13 @@ export class AuthService {
   async login(body: LoginUserDto) {
     const { username, password } = body;
     if (!username || !password) {
-      throw new HttpException(
-        'All fields must be filled!',
-        HttpStatus.NOT_ACCEPTABLE,
-      );
+      throw new NotAcceptableException();
     }
     const user = await this.userRepository.findOne({
       where: { username: username },
     });
     if (!user) {
-      throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+      throw new NotFoundException();
     }
     console.log(user);
     if (await bcrypt.compare(password, user.password)) {
@@ -62,10 +60,7 @@ export class AuthService {
     refresh_token: refreshToken }
     } 
     else {
-      throw new HttpException(
-        'Wrong password or username!',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new UnauthorizedException();
     }
   }
   async generateToken(user: User, expiresIn: string) {
