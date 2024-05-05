@@ -62,16 +62,34 @@ export class PosterService {
     });
     return { message: 'Deleted succesfully' };
   }
-  async modifyPoster(body: UpdatePosterDto, id: string, req) {
+  async modifyPoster(body: UpdatePosterDto, uuid: string, req) {
     const currentPoster = await this.posterRepository.findOne({
-      where: { belongsTo: req['id'], postId: id },
+      where: {
+        belongsTo: req['id'],
+        postId: uuid,
+      },
     });
-    currentPoster.postName = body?.postName;
-    currentPoster.location = body?.location;
-    currentPoster.category = body?.category;
-    currentPoster.mobile = body?.mobile;
-    currentPoster.price = body?.price;
-    currentPoster.save();
+    const { postName, category, description, price, mobile, location } = body;
+    let options = {};
+    if (postName) {
+      options = { ...options, postName: postName };
+    }
+    if (category) {
+      options = { ...options, category: category };
+    }
+    if (description) {
+      options = { ...options, description: description };
+    }
+    if (price) {
+      options = { ...options, price: price };
+    }
+    if (mobile) {
+      options = { ...options, mobile: mobile };
+    }
+    if (location) {
+      options = { ...options, location: location };
+    }
+    await currentPoster.update(options);
     return currentPoster;
   }
   async deleteAll(req) {
@@ -109,10 +127,10 @@ export class PosterService {
     });
     return allPosters;
   }
-  async viewPoster(id: string){
-    const poster = await this.posterRepository.findOne({ where: { postId:id }});
+  async viewPoster(uuid: string) {
+    const poster = await this.posterRepository.findOne({ where: { postId: uuid } });
     poster.viewed += 1;
-    poster.save();
+    await poster.save();
     return poster;
   }
 }

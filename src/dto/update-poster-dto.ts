@@ -3,33 +3,39 @@ import { PosterCategory } from 'src/poster/enums/poster-category';
 import { PosterLocation } from 'src/poster/enums/poster-location';
 
 export class UpdatePosterDto {
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    default: null,
+    required: false,
+  })
   postName: string;
 
   @ApiProperty({
     required: false,
-    name: 'location',
-    type: String,
-    enum: PosterLocation,
-    description: 'The location of the poster',
+    default: null,
   })
-  location: PosterLocation;
+  location: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    default: null,
+    required: false,
+  })
   price: number;
 
   @ApiProperty({
+    default: null,
     required: false,
-    name: 'category',
-    type: String,
-    enum: PosterCategory,
-    description: 'The category of the poster',
   })
-  category: PosterCategory;
+  category: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    default: null,
+    required: false,
+  })
   mobile: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    default: null,
+    required: false,
+  })
   description: string;
 }

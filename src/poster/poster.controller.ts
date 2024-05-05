@@ -64,19 +64,19 @@ export class PosterController {
   }
 
   @UseGuards(AuthGuard)
-  @Put('modify-poster/:id')
+  @Put('modify-poster/:uuid')
   @Version('1')
   modifyPoster(
-    @Query() body: UpdatePosterDto,
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() body: UpdatePosterDto,
+    @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @Req() req: Request,
   ) {
-    return this.posterService.modifyPoster(body, id, req);
+    return this.posterService.modifyPoster(body, uuid, req);
   }
   @UseGuards(AuthGuard)
   @Get('view-poster/:uuid')
   @Version('1')
-  viewPosteer(@Param('uuid', new ParseUUIDPipe()) id: string) {
-    return this.posterService.viewPoster(id);
+  viewPosteer(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    return this.posterService.viewPoster(uuid);
   }
 }

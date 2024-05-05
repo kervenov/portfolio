@@ -16,6 +16,7 @@ async function bootstrap() {
   );
   publicApp.use(morgan('dev'));
   publicApp.setGlobalPrefix('api');
+  publicApp.enableCors();
   publicApp.enableVersioning({
     type: VersioningType.URI,
   });
@@ -39,6 +40,7 @@ async function bootstrap() {
     new ExpressAdapter(privateServer),
   );
   privateApp.use(morgan('dev'));
+  privateApp.enableCors();
   privateApp.setGlobalPrefix('api')
   const privateOptions = new DocumentBuilder()
     .setTitle('Admin')
